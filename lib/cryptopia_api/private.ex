@@ -214,7 +214,7 @@ defmodule CryptopiaApi.Private do
 
   ## Example
   ```elixir
-  iex(14)> CryptopiaApi.Private.submit_trade("ACC/BTC", "Buy", 0.00000250, 100)
+  iex(14)> CryptopiaApi.Private.submit_trade(100, "Buy", 0.00000250, 100)
   {:ok, %{FilledOrders: [], OrderId: 67556018}}
   ```
   """
@@ -228,7 +228,18 @@ defmodule CryptopiaApi.Private do
     })
   end
 
-  # @spec submit_trade(String.t, "Buy" | "Sell", number, number) :: {:ok, [any]} | {:error, any}
+  @doc """
+  Submits a transfer request
+
+  Type should be "Buy" or "Sell"
+
+  ## Example
+  ```elixir
+  iex(1)> CryptopiaApi.Private.submit_trade("ACC/BTC", "Buy", 0.00000250, 100)
+  {:ok, %{FilledOrders: [], OrderId: 67731009}}
+  ```
+  """
+  @spec submit_trade(String.t, String.t, number, number) :: {:ok, [any]} | {:error, any}
   def submit_trade(market, type, rate, amount) do 
     make_request("SubmitTrade", %{
       Market: market,
@@ -238,13 +249,45 @@ defmodule CryptopiaApi.Private do
     })
   end
 
+  @doc """
+  Cancels a single order
+
+  ## Example
+  ```elixir 
+  iex(4)> CryptopiaApi.Private.cancel_trade(67731009)
+  {:ok, [67731009]}
+  ```
+  """
   @spec cancel_trade(number) :: {:ok, [number]} | {:error, any}
   def cancel_trade(order_id), do: make_request("CancelTrade", %{Type: "Trade", OrderId: order_id})
 
-  # spec cancel_trade("All" | "Type" | "TradePair", number) :: {:ok, [number]} | {:error, any}
+  @doc """
+  Cancels a single order, all orders for a tradepair or all open orders
+
+  Type might be one of this: 
+   - "All" - Cancel all open orders 
+   - "TradePair" - Cancel order for given trade pair
+
+  ```elixir
+  iex(5)> CryptopiaApi.Private.cancel_trade("All", 100)
+  {:ok, [65929994, 65930065, 65930124, 65930482, 67556018, 67538785]}
+
+  iex(6)> CryptopiaApi.Private.cancel_trade("TradePair", 100)
+  {:ok, [65929994, 65930065]}
+  ```
+  """
   @spec cancel_trade(String.t, number) :: {:ok, [number]} | {:error, any}
   def cancel_trade(type, pair_id), do: make_request("CancelTrade", %{Type: type, TradePairId: pair_id})
 
+  @doc """
+  Submits a tip to the Trollbox
+
+  ## Example
+  ```elixir
+  iex(4)> CryptopiaApi.Private.submit_tip(1, 45, 0.00034500)
+  {:ok, "You tipped 45 users 0.00034500 BTC each."}
+  ```
+  """
   @spec submit_tip(number, 2..100, number) :: {:ok, String.t} | {:error, any}
   def submit_tip(currency, users, amount) when is_number(currency) do  
     make_request("SubmitTip", %{
@@ -254,6 +297,15 @@ defmodule CryptopiaApi.Private do
     })
   end
 
+  @doc """
+  Submits a tip to the Trollbox
+
+  ## Example
+  ```elixir
+  iex(4)> CryptopiaApi.Private.submit_tip("BTC", 45, 0.00034500)
+  {:ok, "You tipped 45 users 0.00034500 BTC each."}
+  ```
+  """
   @spec submit_tip(String.t, 2..100, number) :: {:ok, String.t} | {:error, any}
   def submit_tip(currency, users, amount) do  
     make_request("SubmitTip", %{
@@ -263,6 +315,15 @@ defmodule CryptopiaApi.Private do
     })
   end
 
+  @doc """
+  Submits a withdrawal request
+
+  ## Example
+  ```elixir
+  iex(6)> CryptopiaApi.Private.submit_withdraw(1, "1a6c1eddb4420eab6e847873104d21b0bc42f147737fa29f2f2b6598ccb5e619", "random-payment_id", 12)
+  {:ok, 405667}
+  ```
+  """
   @spec submit_withdraw(number, String.t, String.t | number, number) :: {:ok, number} | {:error, any}
   def submit_withdraw(currency, address, payment_id, amount) when is_number(currency) do
     make_request("SubmitWithdraw", %{
@@ -273,6 +334,15 @@ defmodule CryptopiaApi.Private do
     })
   end
 
+  @doc """
+  Submits a withdrawal request
+
+  ## Example
+  ```elixir
+  iex(6)> CryptopiaApi.Private.submit_withdraw("BTC", "1a6c1eddb4420eab6e847873104d21b0bc42f147737fa29f2f2b6598ccb5e619", "random-payment_id", 12)
+  {:ok, 405667}
+  ```
+  """
   @spec submit_withdraw(String.t, String.t, String.t | number, number) :: {:ok, number} | {:error, any}
   def submit_withdraw(currency, address, payment_id, amount) do
     make_request("SubmitWithdraw", %{
@@ -283,6 +353,15 @@ defmodule CryptopiaApi.Private do
     })
   end
 
+  @doc """
+  Submits a transfer request
+
+  ##Example
+  ```elixir
+  iex(6)> CryptopiaApi.Private.submit_transfer(1, "kosss", 100)
+  {:ok, "Successfully transfered 100 BTC to Kosss"}
+  ```
+  """
   @spec submit_transfer(number, String.t, number) :: {:ok, String.t} | {:error, any}
   def submit_transfer(currency, username, amount) when is_number(currency) do
     make_request("SubmitTransfer", %{
@@ -292,6 +371,15 @@ defmodule CryptopiaApi.Private do
     })
   end
 
+  @doc """
+  Submits a transfer request
+
+  ##Example
+  ```elixir
+  iex(6)> CryptopiaApi.Private.submit_transfer("BTC", "kosss", 100)
+  {:ok, "Successfully transfered 100 BTC to Kosss"}
+  ```
+  """
   @spec submit_transfer(String.t, String.t, number) :: {:ok, String.t} | {:error, any}
   def submit_transfer(currency, username, amount) do
     make_request("SubmitTransfer", %{
