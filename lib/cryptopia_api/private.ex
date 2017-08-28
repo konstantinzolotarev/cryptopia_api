@@ -95,21 +95,130 @@ defmodule CryptopiaApi.Private do
   @spec get_balance(String.t) :: {:ok, [any]} | {:error, any}
   def get_balance(currency), do: make_request("GetBalance", %{Currency: currency})
 
+  @doc """
+  Creates or returns a deposit address for the specified currency
+
+  ## Example:
+  ```elixir
+  iex(1)> CryptopiaApi.Private.get_deposit_address(1)
+  {:ok,
+    %{Address: "1KUNsASBLTWfxStANiUEiTWktWvWhgUzqo", BaseAddress: nil,
+      Currency: "BTC"}}
+  ```
+  """
+  @spec get_deposit_address(number) :: {:ok, map} | {:error, any}
   def get_deposit_address(currencyId) when is_number(currencyId), do: make_request("GetDepositAddress", %{CurrencyId: currencyId})
+
+  @doc """
+  Creates or returns a deposit address for the specified currency
+
+  ## Example:
+  ```elixir
+  iex(1)> CryptopiaApi.Private.get_deposit_address("BTC")
+  {:ok,
+    %{Address: "1KUNsASBLTWfxStANiUEiTWktWvWhgUzqo", BaseAddress: nil,
+      Currency: "BTC"}}
+  ```
+  """
+  @spec get_deposit_address(String.t) :: {:ok, map} | {:error, any}
   def get_deposit_address(currency), do: make_request("GetDepositAddress", %{Currency: currency})
 
+  @doc """
+  Returns a list of open orders for all tradepairs or specified tradepair
+
+  ## Example
+  ```elixir
+  iex(10)> CryptopiaApi.Private.get_open_orders("ACC/BTC")
+  {:ok,
+    [%{Amount: 7.26568176, Market: "ACC/BTC", OrderId: 65930482, Rate: 1.023e-4,
+      Remaining: 7.26568176, TimeStamp: "2017-08-25T21:33:25.3199485",
+      Total: 7.4328e-4, TradePairId: 5331, Type: "Sell"}]}
+  ```
+  """
+  @spec get_open_orders(String.t | number) :: {:ok, [any]} | {:error, any}
   def get_open_orders(market), do: get_open_orders(market, 100)
+
+  @doc """
+  Same as get_open_orders/1 but 2nd parameter is amount of orders to return
+  """
+  @spec get_open_orders(String.t | number, number) :: {:ok, [any]} | {:error, any}
   def get_open_orders(market, count) when is_number(market), do: make_request("GetOpenOrders", %{TradePairId: market, Count: count})
   def get_open_orders(market, count), do: make_request("GetOpenOrders", %{Market: market, Count: count})
 
+  @doc """
+  Returns a list of trade history for all tradepairs or specified tradepair
+
+  ## Example
+  ```elixir
+  iex(1)> CryptopiaApi.Private.get_trade_history("ACC/BTC")
+  {:ok,
+    [%{Amount: 723.30610462, Fee: 1.33e-6, Market: "NAMO/BTC", Rate: 9.2e-7,
+      TimeStamp: "2017-08-28T12:14:31.8680187", Total: 6.6544e-4,
+      TradeId: 15757416, TradePairId: 5405, Type: "Buy"},
+     %{Amount: 500.0, Fee: 8.6e-7, Market: "NAMO/BTC", Rate: 8.6e-7,
+       TimeStamp: "2017-08-28T12:12:09.4043842", Total: 4.3e-4, TradeId: 15757174,
+       TradePairId: 5405, Type: "Sell"},
+     %{Amount: 500.0, Fee: 6.2e-7, Market: "NAMO/BTC", Rate: 6.2e-7,
+       TimeStamp: "2017-08-28T08:37:22.5063473", Total: 3.1e-4, TradeId: 15745534,
+       TradePairId: 5405, Type: "Buy"},
+     %{Amount: 7.26568176, Fee: 6.7e-7, Market: "ACC/BTC", Rate: 4.586e-5,
+       TimeStamp: "2017-08-25T21:19:47.3708483", Total: 3.332e-4,
+       TradeId: 15573801, TradePairId: 5331, Type: "Buy"},
+     %{Amount: 93.07663016, Fee: 1.16e-6, Market: "OX/BTC", Rate: 6.24e-6,
+       TimeStamp: "2017-08-25T20:31:38.4157247", Total: 5.808e-4,
+       TradeId: 15571756, TradePairId: 5399, Type: "Buy"}]}
+  ```
+  """
+  @spec get_trade_history(String.t | number) :: {:ok, [any]} | {:error, any}
   def get_trade_history(market), do: get_trade_history(market, 100)
+
+  @doc """
+  Returns a list of trade history for all tradepairs or specified tradepair with amount of records returned
+
+  ## Example
+  ```elixir
+  iex(1)> CryptopiaApi.Private.get_trade_history("ACC/BTC", 1)
+  {:ok,
+    [%{Amount: 723.30610462, Fee: 1.33e-6, Market: "NAMO/BTC", Rate: 9.2e-7,
+      TimeStamp: "2017-08-28T12:14:31.8680187", Total: 6.6544e-4,
+      TradeId: 15757416, TradePairId: 5405, Type: "Buy"}]}
+  ```
+  """
+  @spec get_trade_history(String.t | number, number) :: {:ok, [any]} | {:error, any}
   def get_trade_history(market, count), do: make_request("GetTradeHistory", %{TradePairId: market, Count: count})
   def get_trade_history(market, count), do: make_request("GetTradeHistory", %{Market: market, Count: count})
 
   # @spec get_transactions("Deposit" | "Withdraw") :: {:ok, [any]} | {:error, any}
+  @doc """
+  Returns a list of transactions
+
+  Type could be "Deposit" or "Withdraw"
+
+  ## Example
+  ```elixir
+  iex(1)> CryptopiaApi.Private.get_transactions("Deposit")
+  {:ok,
+    [%{Address: nil, Amount: 0.002, Confirmations: 2, Currency: "BTC", Fee: 0.0,
+      Id: 9515790, Status: "Confirmed", Timestamp: "2017-08-25T15:21:15",
+      TxId: "1a6c1eddb4420eab6e847873104d21b0bc42f147737fa29f2f2b6598ccb5e619",
+      Type: "Deposit"}]}
+  ```
+  """
+  @spec get_transactions(String.t) :: {:ok, [any]} | {:error, any}
   def get_transactions(type, count \\ 100), do: make_request("GetTransactions", %{Type: type, Count: count})
 
-  # @spec submit_trade(number, "Buy" | "Sell", number, number) :: {:ok, [any]} | {:error, any}
+  @doc """
+  Submits a new trade order
+
+  Type should be "Buy" or "Sell"
+
+  ## Example
+  ```elixir
+  iex(14)> CryptopiaApi.Private.submit_trade("ACC/BTC", "Buy", 0.00000250, 100)
+  {:ok, %{FilledOrders: [], OrderId: 67556018}}
+  ```
+  """
+  @spec submit_trade(number, String.t, number, number) :: {:ok, [any]} | {:error, any}
   def submit_trade(market, type, rate, amount) when is_number(market) do 
     make_request("SubmitTrade", %{
       TradePairId: market,
