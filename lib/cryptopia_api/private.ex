@@ -139,7 +139,7 @@ defmodule CryptopiaApi.Private do
   def get_open_orders(market), do: get_open_orders(market, 100)
 
   @doc """
-  Same as get_open_orders/1 but 2nd parameter is amount of orders to return
+  Same as `get_open_orders/1` with additional 2nd parameter - amount of orders to return
   """
   @spec get_open_orders(String.t | number, number) :: {:ok, [any]} | {:error, any}
   def get_open_orders(market, count) when is_number(market), do: make_request("GetOpenOrders", %{TradePairId: market, Count: count})
@@ -188,11 +188,26 @@ defmodule CryptopiaApi.Private do
   def get_trade_history(market, count) when is_number(market), do: make_request("GetTradeHistory", %{TradePairId: market, Count: count})
   def get_trade_history(market, count), do: make_request("GetTradeHistory", %{Market: market, Count: count})
 
-  # @spec get_transactions("Deposit" | "Withdraw") :: {:ok, [any]} | {:error, any}
+  @doc """
+  Load list of all deposit transactions.
+
+  See `get_transactions/1` for more details
+  """
+  @spec get_deposit_transactions(number) :: {:ok, [any]} | {:error, any}
+  def get_deposit_transactions(count \\ 100), do: get_transactions("Deposit", count)
+
+  @doc """
+  Load list of all withdraw transactions.
+
+  See `get_transactions/1` for more details
+  """
+  @spec get_deposit_transactions(number) :: {:ok, [any]} | {:error, any}
+  def get_withdraw_transactions(count \\ 100), do: get_transactions("Withdraw", count)
+
   @doc """
   Returns a list of transactions
 
-  Type could be "Deposit" or "Withdraw"
+  Type could be `"Deposit"` or `"Withdraw"`
 
   ## Example
   ```elixir
@@ -204,13 +219,39 @@ defmodule CryptopiaApi.Private do
       Type: "Deposit"}]}
   ```
   """
-  @spec get_transactions(String.t) :: {:ok, [any]} | {:error, any}
+  @spec get_transactions(String.t, number) :: {:ok, [any]} | {:error, any}
   def get_transactions(type, count \\ 100), do: make_request("GetTransactions", %{Type: type, Count: count})
+
+  @doc """
+  Submit a new Buy order
+
+  Similar to `submit_trade/4` with type: `"Buy"`
+  ## Example
+  ```elixir
+  iex(14)> CryptopiaApi.Private.submit_trade_buy(100, 0.00000250, 100)
+  {:ok, %{FilledOrders: [], OrderId: 67556018}}
+  ```
+  """
+  @spec submit_trade_buy(String.t | number, number, number) :: {:ok, map} | {:error, any}
+  def submit_trade_buy(market, rate, amount), do: submit_trade(market, "Buy", rate, amount)
+
+  @doc """
+  Submit a new Sell order
+
+  Similar to `submit_trade/4` with type: `"Sell"`
+  ## Example
+  ```elixir
+  iex(14)> CryptopiaApi.Private.submit_trade_sell(100, 0.00000250, 100)
+  {:ok, %{FilledOrders: [], OrderId: 67556018}}
+  ```
+  """
+  @spec submit_trade_sell(String.t | number, number, number) :: {:ok, map} | {:error, any}
+  def submit_trade_sell(market, rate, amount), do: submit_trade(market, "Sell", rate, amount)
 
   @doc """
   Submits a new trade order
 
-  Type should be "Buy" or "Sell"
+  Type should be `"Buy"` or `"Sell"`
 
   ## Example
   ```elixir
@@ -218,7 +259,7 @@ defmodule CryptopiaApi.Private do
   {:ok, %{FilledOrders: [], OrderId: 67556018}}
   ```
   """
-  @spec submit_trade(number, String.t, number, number) :: {:ok, [any]} | {:error, any}
+  @spec submit_trade(number, String.t, number, number) :: {:ok, map} | {:error, any}
   def submit_trade(market, type, rate, amount) when is_number(market) do 
     make_request("SubmitTrade", %{
       TradePairId: market,
@@ -231,7 +272,7 @@ defmodule CryptopiaApi.Private do
   @doc """
   Submits a transfer request
 
-  Type should be "Buy" or "Sell"
+  Type should be `"Buy"` or `"Sell"`
 
   ## Example
   ```elixir
@@ -239,7 +280,7 @@ defmodule CryptopiaApi.Private do
   {:ok, %{FilledOrders: [], OrderId: 67731009}}
   ```
   """
-  @spec submit_trade(String.t, String.t, number, number) :: {:ok, [any]} | {:error, any}
+  @spec submit_trade(String.t, String.t, number, number) :: {:ok, map} | {:error, any}
   def submit_trade(market, type, rate, amount) do 
     make_request("SubmitTrade", %{
       Market: market,
@@ -265,8 +306,8 @@ defmodule CryptopiaApi.Private do
   Cancels a single order, all orders for a tradepair or all open orders
 
   Type might be one of this: 
-   - "All" - Cancel all open orders 
-   - "TradePair" - Cancel order for given trade pair
+   - `"All"` - Cancel all open orders 
+   - `"TradePair"` - Cancel order for given trade pair
 
   ```elixir
   iex(5)> CryptopiaApi.Private.cancel_trade("All", 100)
@@ -318,6 +359,8 @@ defmodule CryptopiaApi.Private do
   @doc """
   Submits a withdrawal request
 
+  **Note** you have to enable this API in settings first
+
   ## Example
   ```elixir
   iex(6)> CryptopiaApi.Private.submit_withdraw(1, "1a6c1eddb4420eab6e847873104d21b0bc42f147737fa29f2f2b6598ccb5e619", "random-payment_id", 12)
@@ -336,6 +379,8 @@ defmodule CryptopiaApi.Private do
 
   @doc """
   Submits a withdrawal request
+
+  **Note** you have to enable this API in settings first
 
   ## Example
   ```elixir
@@ -356,7 +401,7 @@ defmodule CryptopiaApi.Private do
   @doc """
   Submits a transfer request
 
-  ##Example
+  ## Example
   ```elixir
   iex(6)> CryptopiaApi.Private.submit_transfer(1, "kosss", 100)
   {:ok, "Successfully transfered 100 BTC to Kosss"}
@@ -374,7 +419,7 @@ defmodule CryptopiaApi.Private do
   @doc """
   Submits a transfer request
 
-  ##Example
+  ## Example
   ```elixir
   iex(6)> CryptopiaApi.Private.submit_transfer("BTC", "kosss", 100)
   {:ok, "Successfully transfered 100 BTC to Kosss"}

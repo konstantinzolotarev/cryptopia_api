@@ -3,7 +3,7 @@ defmodule CryptopiaApi.Public do
   import CryptopiaApi
 
   @moduledoc """
-  Public API for [Cryptopia](https://www.cryptopia.co.nz/Forum/Thread/255) 
+  Public API for [Cryptopia](https://www.cryptopia.co.nz/Forum/Thread/255)
   """
 
   @doc """
@@ -68,17 +68,69 @@ defmodule CryptopiaApi.Public do
   ```
   """
   @spec get_markets() :: {:ok, [any]} | {:error, any}
-  @spec get_markets(String.t | number) :: {:ok, [any]} | {:error, any}
-  @spec get_markets(String.t, number) :: {:ok, [any]} | {:error, any}
   def get_markets, do: get_body("GetMarkets")
-  def get_markets(market_or_hours), do: get_body("GetMarkets/" <> market_or_hours)
+
+  @doc """
+  Load list of markets from API for specified market
+
+  ## Example
+  ```elixir
+  iex(4)> CryptopiaApi.Public.get_markets("BTC")
+  {:ok,
+    [%{AskPrice: 3.4e-7, BaseVolume: 0.06151106, BidPrice: 3.3e-7,
+      BuyBaseVolume: 1.20316179, BuyVolume: 24165298.27313356, Change: -5.71,
+      Close: 3.3e-7, High: 3.8e-7, Label: "$$$/BTC", LastPrice: 3.3e-7,
+      Low: 3.1e-7, Open: 3.5e-7, SellBaseVolume: 31490.81097327,
+      SellVolume: 10782670.8537473, TradePairId: 1261, Volume: 176110.12588512},
+     %{AskPrice: 4.2e-7, BaseVolume: 0.23717345, BidPrice: 4.1e-7, ...},
+     %{AskPrice: 1.49999884, BaseVolume: 12.06876197, ...},
+     %{AskPrice: 3.999e-5, ...}, %{...}, ...]}
+  ```
+
+  This method also provides an API for fetching list of all merkets for last `hours`
+
+  ## Example
+  ```elixir
+  iex(4)> CryptopiaApi.Public.get_markets(12)
+  {:ok,
+    [%{AskPrice: 3.4e-7, BaseVolume: 0.06151106, BidPrice: 3.3e-7,
+      BuyBaseVolume: 1.20316179, BuyVolume: 24165298.27313356, Change: -5.71,
+      Close: 3.3e-7, High: 3.8e-7, Label: "$$$/BTC", LastPrice: 3.3e-7,
+      Low: 3.1e-7, Open: 3.5e-7, SellBaseVolume: 31490.81097327,
+      SellVolume: 10782670.8537473, TradePairId: 1261, Volume: 176110.12588512},
+     %{AskPrice: 4.2e-7, BaseVolume: 0.23717345, BidPrice: 4.1e-7, ...},
+     %{AskPrice: 1.49999884, BaseVolume: 12.06876197, ...},
+     %{AskPrice: 3.999e-5, ...}, %{...}, ...]}
+  ```
+  """
+  @spec get_markets(String.t | number) :: {:ok, [any]} | {:error, any}
+  def get_markets(market_or_hours), do: get_body("GetMarkets/#{market_or_hours}")
+
+  @doc """
+  Load list of merkets for specific currency + past hours
+
+  ## Example
+  ```elixir
+  iex(4)> CryptopiaApi.Public.get_markets("BTC", 12)
+  {:ok,
+    [%{AskPrice: 3.4e-7, BaseVolume: 0.06151106, BidPrice: 3.3e-7,
+      BuyBaseVolume: 1.20316179, BuyVolume: 24165298.27313356, Change: -5.71,
+      Close: 3.3e-7, High: 3.8e-7, Label: "$$$/BTC", LastPrice: 3.3e-7,
+      Low: 3.1e-7, Open: 3.5e-7, SellBaseVolume: 31490.81097327,
+      SellVolume: 10782670.8537473, TradePairId: 1261, Volume: 176110.12588512},
+     %{AskPrice: 4.2e-7, BaseVolume: 0.23717345, BidPrice: 4.1e-7, ...},
+     %{AskPrice: 1.49999884, BaseVolume: 12.06876197, ...},
+     %{AskPrice: 3.999e-5, ...}, %{...}, ...]}
+  ```
+  """
+  @spec get_markets(String.t, number) :: {:ok, [any]} | {:error, any}
   def get_markets(market, hours), do: get_body("GetMarkets/#{market}/#{hours}")
-  
+
   @doc """
   Load market data for the specified trade pair
 
   ## Example
-  ```elixir 
+  ```elixir
   iex(1)> CryptopiaApi.Public.get_market("ACC_BTC")
   {:ok,
     %{AskPrice: 4.263e-5, BaseVolume: 0.68372883, BidPrice: 4.021e-5,
@@ -87,10 +139,15 @@ defmodule CryptopiaApi.Public do
       Low: 2.402e-5, Open: 2.947e-5, SellBaseVolume: 41.79914411,
       SellVolume: 67079.729386, TradePairId: 5331, Volume: 20217.2373583}}
   ```
+  """
+  @spec get_market(String.t) :: {:ok, map} | {:error, any}
+  def get_market(market), do: get_body("GetMarket/#{market}")
 
-  Or with specified amount of hours
+  @doc """
+  Load market data for the specified trade pair with specified amount of hours
+
   ## Example
-  ```elixir 
+  ```elixir
   iex(2)> CryptopiaApi.Public.get_market("ACC_BTC", 24)
   {:ok,
     %{AskPrice: 4.263e-5, BaseVolume: 0.68367683, BidPrice: 4.022e-5,
@@ -100,9 +157,7 @@ defmodule CryptopiaApi.Public do
       SellVolume: 67079.729386, TradePairId: 5331, Volume: 20215.47258623}}
   ```
   """
-  @spec get_market(String.t) :: {:ok, map} | {:error, any}
   @spec get_market(String.t, number) :: {:ok, map} | {:error, any}
-  def get_market(market), do: get_body("GetMarket/#{market}")
   def get_market(market, hours), do: get_body("GetMarket/#{market}/#{hours}")
 
   @doc """
@@ -120,8 +175,12 @@ defmodule CryptopiaApi.Public do
      %{Amount: 254.98840728, Label: "ACC/BTC", ...}, %{Amount: 8.33564879, ...},
      %{...}, ...]}
   ```
+  """
+  @spec get_market_history(String.t) :: {:ok, [any]} | {:error, any}
+  def get_market_history(market), do: get_body("GetMarketHistory/#{market}")
 
-  Or with hours:
+  @doc """
+  Load the market history data for the specified tarde pair with hours:
 
   ```elixir
   iex(5)> CryptopiaApi.Public.get_market_history("ACC_BTC", 1)
@@ -130,9 +189,7 @@ defmodule CryptopiaApi.Public do
       Timestamp: 1503907748, Total: 0.00208663, TradePairId: 5331, Type: "Sell"}]}
   ```
   """
-  @spec get_market_history(String.t) :: {:ok, [any]} | {:error, any}
   @spec get_market_history(String.t, number) :: {:ok, [any]} | {:error, any}
-  def get_market_history(market), do: get_body("GetMarketHistory/#{market}")
   def get_market_history(market, hours), do: get_body("GetMarketHistory/#{market}/#{hours}")
 
   @doc """
@@ -151,8 +208,12 @@ defmodule CryptopiaApi.Public do
             %{Label: "ACC/BTC", Price: 9.0e-5, ...}, %{Label: "ACC/BTC", ...}, %{...},
             ...]}}
   ```
+  """
+  @spec get_market_orders(String.t) :: {:ok, [any]} | {:error, any}
+  def get_market_orders(market), do: get_body("GetMarketOrders/#{market}")
 
-  Or same with hours
+  @doc """
+  Load the open buy and sell orders for the specified tarde pair with hours
   ```elixir
   iex(8)> CryptopiaApi.Public.get_market_orders("ACC_BTC", 1)
   {:ok,
@@ -162,8 +223,6 @@ defmodule CryptopiaApi.Public do
         TradePairId: 5331, Volume: 34.37512433}]}}
   ```
   """
-  @spec get_market_orders(String.t) :: {:ok, [any]} | {:error, any}
   @spec get_market_orders(String.t, number) :: {:ok, [any]} | {:error, any}
-  def get_market_orders(market), do: get_body("GetMarketOrders/#{market}")
   def get_market_orders(market, amount), do: get_body("GetMarketOrders/#{market}/#{amount}")
 end

@@ -31,7 +31,11 @@ defmodule CryptopiaApi do
     |> pick_data()
   end
 
-  defp fetch_body({:ok, %HTTPoison.Response{body: body}}), do: {:ok, body}
+  defp fetch_body({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: {:ok, body}
+  defp fetch_body({:ok, %HTTPoison.Response{status_code: 201, body: body}}), do: {:ok, body}
+  # Handle not auth for user. API would not return anything in body
+  defp fetch_body({:ok, %HTTPoison.Response{status_code: 401}}), do: {:ok, "Wrong authorisation !"}
+  defp fetch_body({:ok, %HTTPoison.Response{body: body}}), do: {:error, body}
   defp fetch_body({:error, err}), do: {:error, err}
   defp fetch_body(_), do: {:error, "Something went wrong"}
 
