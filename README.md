@@ -3,7 +3,10 @@
 Cryptopia Crypto currency exchange API.
 
 [Public API](https://www.cryptopia.co.nz/Forum/Thread/255)
+
 [Private API](https://www.cryptopia.co.nz/Forum/Thread/256)
+
+List of methods for module in [documentation](https://hexdocs.pm/cryptopia_api/api-reference.html)
 
 ## Installation
 
