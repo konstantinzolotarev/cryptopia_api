@@ -3,8 +3,7 @@
 Cryptopia Crypto currency exchange API.
 
 [Public API](https://www.cryptopia.co.nz/Forum/Thread/255)
-
-**Note that for now only Publick API is ready. Private one is in development**
+[Private API](https://www.cryptopia.co.nz/Forum/Thread/256)
 
 ## Installation
 
@@ -25,6 +24,22 @@ def application do
   [applications: [:cryptopia_api]]
 end
 ```
+
+## Configuration
+
+For Pulic API only no configuration is required.
+
+But for Private API you have to configure application:
+
+Add this lines to you application `config.exs`:
+
+```elixir
+use Mix.Config
+
+config :cryptopia_api, api_key: "you-api-key-here"
+config :cryptopia_api, secret_key: "your-secret-key-here"
+```
+
 ## Usage
 
 ```elixir
