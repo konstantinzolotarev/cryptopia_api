@@ -2,6 +2,10 @@ defmodule CryptopiaApi.Public do
 
   import CryptopiaApi
 
+  @moduledoc """
+  Public API for [Cryptopia](https://www.cryptopia.co.nz/Forum/Thread/255) 
+  """
+
   @doc """
   Load currencies form API
 

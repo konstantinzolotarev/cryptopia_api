@@ -24,7 +24,8 @@ defmodule CryptopiaApi.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.13"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:ex_doc, "~> 0.14", only: :dev}
     ]
   end
 
