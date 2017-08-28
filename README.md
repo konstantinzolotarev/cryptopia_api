@@ -4,6 +4,8 @@ Cryptopia Crypto currency exchange API.
 
 [Public API](https://www.cryptopia.co.nz/Forum/Thread/255)
 
+**Note that for now only Publick API is ready. Private one is in development**
+
 ## Installation
 
 First add `cryptopia_api` to your `mix.exs` dependencies:
