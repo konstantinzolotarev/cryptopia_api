@@ -46,7 +46,7 @@ defmodule CryptopiaApi.Private do
     ]
   end
 
-  defp make_request(method), do: make_request(method, "")
+  # defp make_request(method), do: make_request(method, "")
   defp make_request(method, params), do: post_body(method, params, headers(method, params))
 
   @doc """
@@ -185,7 +185,7 @@ defmodule CryptopiaApi.Private do
   ```
   """
   @spec get_trade_history(String.t | number, number) :: {:ok, [any]} | {:error, any}
-  def get_trade_history(market, count), do: make_request("GetTradeHistory", %{TradePairId: market, Count: count})
+  def get_trade_history(market, count) when is_number(market), do: make_request("GetTradeHistory", %{TradePairId: market, Count: count})
   def get_trade_history(market, count), do: make_request("GetTradeHistory", %{Market: market, Count: count})
 
   # @spec get_transactions("Deposit" | "Withdraw") :: {:ok, [any]} | {:error, any}
