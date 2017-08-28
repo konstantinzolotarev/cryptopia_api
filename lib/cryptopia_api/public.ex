@@ -182,6 +182,7 @@ defmodule CryptopiaApi.Public do
   @doc """
   Load the market history data for the specified tarde pair with hours:
 
+  ## Example
   ```elixir
   iex(5)> CryptopiaApi.Public.get_market_history("ACC_BTC", 1)
   {:ok,
@@ -214,6 +215,8 @@ defmodule CryptopiaApi.Public do
 
   @doc """
   Load the open buy and sell orders for the specified tarde pair with hours
+
+  ## Example
   ```elixir
   iex(8)> CryptopiaApi.Public.get_market_orders("ACC_BTC", 1)
   {:ok,
