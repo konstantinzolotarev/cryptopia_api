@@ -1,7 +1,5 @@
 defmodule CryptopiaApi do
-  @moduledoc """
-  Documentation for CryptopiaApi.
-  """
+  @moduledoc false
 
   use HTTPoison.Base
 
