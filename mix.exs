@@ -7,6 +7,7 @@ defmodule CryptopiaApi.Mixfile do
       version: "0.2.3",
       elixir: "~> 1.3",
       description: "Elixir wrapped cryptopia API",
+      docs: [extras: ["README.md"]],
       deps: deps(),
       package: package(),
       source_url: "https://github.com/konstantinzolotarev/cryptopia_api"
