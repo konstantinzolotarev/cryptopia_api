@@ -43,6 +43,21 @@ config :cryptopia_api, api_key: "you-api-key-here"
 config :cryptopia_api, secret_key: "your-secret-key-here"
 ```
 
+## Timeout option
+Library supports special `:request_timeout` option. 
+It iwll set defaul timeout for reply from cryptopia api. 
+By default it set to **8 seconds**
+
+You could change it using your application `config.exs`:
+
+```elixir
+use Mix.Config
+
+config :cryptopia_api, request_timeout: 10_000
+```
+
+this option will be applied to all requests
+
 ## Usage
 
 ```elixir

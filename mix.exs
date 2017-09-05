@@ -4,7 +4,7 @@ defmodule CryptopiaApi.Mixfile do
   def project do
     [
       app: :cryptopia_api,
-      version: "0.2.4",
+      version: "0.2.5",
       elixir: "~> 1.3",
       description: "Elixir wrapped cryptopia API",
       docs: [extras: ["README.md"]],

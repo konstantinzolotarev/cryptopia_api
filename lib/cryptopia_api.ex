@@ -4,9 +4,14 @@ defmodule CryptopiaApi do
   use HTTPoison.Base
 
   @host "https://www.cryptopia.co.nz/api/"
+  @timeout Application.get_env(:cryptopia_api, :request_timeout, 8000)
 
   def host, do: @host
   def process_url(url), do: @host <> url
+
+  defp process_request_options([]), do: [timeout: @timeout]
+  defp process_request_options([timeout: _t] = opts), do: opts
+  defp process_request_options(opts), do: Keyword.merge(opts, [timeout: @timeout])
 
   defp process_request_body(req) when is_binary(req), do: req
   defp process_request_body(req), do: Poison.encode!(req)
