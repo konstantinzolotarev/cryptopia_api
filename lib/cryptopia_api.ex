@@ -27,11 +27,11 @@ defmodule CryptopiaApi do
     |> Poison.decode!(keys: :atoms)
   end
 
-  def get_body(url), do: get(url) |> fetch_body() |> pick_data()
-  def get_body(url, pid), do: get(url, %{}, stream_to: pid)
+  def get_body(url), do: get(url, %{}, hackney: [:insecure]) |> fetch_body() |> pick_data()
+  def get_body(url, pid), do: get(url, %{}, stream_to: pid, hackney: [:insecure])
 
   def post_body(url, params, headers) do
-    post(url, params, headers)
+    post(url, params, headers, hackney: [:insecure])
     |> fetch_body()
     |> pick_data()
   end

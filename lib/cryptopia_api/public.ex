@@ -22,7 +22,7 @@ defmodule CryptopiaApi.Public do
      %{Algorithm: "Scrypt", ...}, %{...}, ...]}
   ```
   """
-  @spec get_currencies() :: {:ok, [any]} | {:error, any}
+  @spec get_currencies() :: {:ok, [term]} | {:error, term}
   def get_currencies, do: get_body("GetCurrencies")
 
   @doc """
@@ -47,7 +47,7 @@ defmodule CryptopiaApi.Public do
      %{BaseCurrency: "Bitcoin", ...}, %{...}, ...]}
   ```
   """
-  @spec get_trade_pairs() :: {:ok, [any]} | {:error, any}
+  @spec get_trade_pairs() :: {:ok, [term]} | {:error, term}
   def get_trade_pairs, do: get_body("GetTradePairs")
 
   @doc """
@@ -67,7 +67,7 @@ defmodule CryptopiaApi.Public do
      %{AskPrice: 3.999e-5, ...}, %{...}, ...]}
   ```
   """
-  @spec get_markets() :: {:ok, [any]} | {:error, any}
+  @spec get_markets() :: {:ok, [term]} | {:error, term}
   def get_markets, do: get_body("GetMarkets")
 
   @doc """
@@ -103,7 +103,7 @@ defmodule CryptopiaApi.Public do
      %{AskPrice: 3.999e-5, ...}, %{...}, ...]}
   ```
   """
-  @spec get_markets(String.t | number) :: {:ok, [any]} | {:error, any}
+  @spec get_markets(String.t | number) :: {:ok, [term]} | {:error, term}
   def get_markets(market_or_hours), do: get_body("GetMarkets/#{market_or_hours}")
 
   @doc """
@@ -123,7 +123,7 @@ defmodule CryptopiaApi.Public do
      %{AskPrice: 3.999e-5, ...}, %{...}, ...]}
   ```
   """
-  @spec get_markets(String.t, number) :: {:ok, [any]} | {:error, any}
+  @spec get_markets(String.t, number) :: {:ok, [term]} | {:error, term}
   def get_markets(market, hours), do: get_body("GetMarkets/#{market}/#{hours}")
 
   @doc """
@@ -140,7 +140,7 @@ defmodule CryptopiaApi.Public do
       SellVolume: 67079.729386, TradePairId: 5331, Volume: 20217.2373583}}
   ```
   """
-  @spec get_market(String.t) :: {:ok, map} | {:error, any}
+  @spec get_market(String.t) :: {:ok, map} | {:error, term}
   def get_market(market), do: get_body("GetMarket/#{market}")
 
   @doc """
@@ -157,7 +157,7 @@ defmodule CryptopiaApi.Public do
       SellVolume: 67079.729386, TradePairId: 5331, Volume: 20215.47258623}}
   ```
   """
-  @spec get_market(String.t, number) :: {:ok, map} | {:error, any}
+  @spec get_market(String.t, number) :: {:ok, map} | {:error, term}
   def get_market(market, hours), do: get_body("GetMarket/#{market}/#{hours}")
 
   @doc """
@@ -176,7 +176,7 @@ defmodule CryptopiaApi.Public do
      %{...}, ...]}
   ```
   """
-  @spec get_market_history(String.t) :: {:ok, [any]} | {:error, any}
+  @spec get_market_history(String.t) :: {:ok, [term]} | {:error, term}
   def get_market_history(market), do: get_body("GetMarketHistory/#{market}")
 
   @doc """
@@ -190,7 +190,7 @@ defmodule CryptopiaApi.Public do
       Timestamp: 1503907748, Total: 0.00208663, TradePairId: 5331, Type: "Sell"}]}
   ```
   """
-  @spec get_market_history(String.t, number) :: {:ok, [any]} | {:error, any}
+  @spec get_market_history(String.t, number) :: {:ok, [term]} | {:error, term}
   def get_market_history(market, hours), do: get_body("GetMarketHistory/#{market}/#{hours}")
 
   @doc """
@@ -210,7 +210,7 @@ defmodule CryptopiaApi.Public do
             ...]}}
   ```
   """
-  @spec get_market_orders(String.t) :: {:ok, [any]} | {:error, any}
+  @spec get_market_orders(String.t) :: {:ok, [term]} | {:error, term}
   def get_market_orders(market), do: get_body("GetMarketOrders/#{market}")
 
   @doc """
@@ -226,6 +226,6 @@ defmodule CryptopiaApi.Public do
         TradePairId: 5331, Volume: 34.37512433}]}}
   ```
   """
-  @spec get_market_orders(String.t, number) :: {:ok, [any]} | {:error, any}
+  @spec get_market_orders(String.t, number) :: {:ok, [term]} | {:error, term}
   def get_market_orders(market, amount), do: get_body("GetMarketOrders/#{market}/#{amount}")
 end

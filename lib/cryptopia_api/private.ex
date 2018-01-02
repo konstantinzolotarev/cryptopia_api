@@ -62,7 +62,7 @@ defmodule CryptopiaApi.Private do
      ...]}
   ```
   """
-  @spec get_balance() :: {:ok, [any]} | {:error, any}
+  @spec get_balance() :: {:ok, [term]} | {:error, term}
   def get_balance, do: get_balance("")
 
   @doc """
@@ -77,7 +77,7 @@ defmodule CryptopiaApi.Private do
       Symbol: "BTC", Total: 7.7355e-4, Unconfirmed: 0.0}]}
   ```
   """
-  @spec get_balance(number) :: {:ok, [any]} | {:error, any}
+  @spec get_balance(number) :: {:ok, [term]} | {:error, term}
   def get_balance(currencyId) when is_number(currencyId), do: make_request("GetBalance", %{CurrencyId: currencyId})
 
   @doc """
@@ -92,7 +92,7 @@ defmodule CryptopiaApi.Private do
       Symbol: "BTC", Total: 7.7355e-4, Unconfirmed: 0.0}]}
   ```
   """
-  @spec get_balance(String.t) :: {:ok, [any]} | {:error, any}
+  @spec get_balance(String.t) :: {:ok, [term]} | {:error, term}
   def get_balance(currency), do: make_request("GetBalance", %{Currency: currency})
 
   @doc """
@@ -106,7 +106,7 @@ defmodule CryptopiaApi.Private do
       Currency: "BTC"}}
   ```
   """
-  @spec get_deposit_address(number) :: {:ok, map} | {:error, any}
+  @spec get_deposit_address(number) :: {:ok, map} | {:error, term}
   def get_deposit_address(currencyId) when is_number(currencyId), do: make_request("GetDepositAddress", %{CurrencyId: currencyId})
 
   @doc """
@@ -120,7 +120,7 @@ defmodule CryptopiaApi.Private do
       Currency: "BTC"}}
   ```
   """
-  @spec get_deposit_address(String.t) :: {:ok, map} | {:error, any}
+  @spec get_deposit_address(String.t) :: {:ok, map} | {:error, term}
   def get_deposit_address(currency), do: make_request("GetDepositAddress", %{Currency: currency})
 
   @doc """
@@ -135,13 +135,13 @@ defmodule CryptopiaApi.Private do
       Total: 7.4328e-4, TradePairId: 5331, Type: "Sell"}]}
   ```
   """
-  @spec get_open_orders(String.t | number) :: {:ok, [any]} | {:error, any}
+  @spec get_open_orders(String.t | number) :: {:ok, [term]} | {:error, term}
   def get_open_orders(market), do: get_open_orders(market, 100)
 
   @doc """
   Same as `get_open_orders/1` with additional 2nd parameter - amount of orders to return
   """
-  @spec get_open_orders(String.t | number, number) :: {:ok, [any]} | {:error, any}
+  @spec get_open_orders(String.t | number, number) :: {:ok, [term]} | {:error, term}
   def get_open_orders(market, count) when is_number(market), do: make_request("GetOpenOrders", %{TradePairId: market, Count: count})
   def get_open_orders(market, count), do: make_request("GetOpenOrders", %{Market: market, Count: count})
 
@@ -169,7 +169,7 @@ defmodule CryptopiaApi.Private do
        TradeId: 15571756, TradePairId: 5399, Type: "Buy"}]}
   ```
   """
-  @spec get_trade_history(String.t | number) :: {:ok, [any]} | {:error, any}
+  @spec get_trade_history(String.t | number) :: {:ok, [term]} | {:error, term}
   def get_trade_history(market), do: get_trade_history(market, 100)
 
   @doc """
@@ -184,7 +184,7 @@ defmodule CryptopiaApi.Private do
       TradeId: 15757416, TradePairId: 5405, Type: "Buy"}]}
   ```
   """
-  @spec get_trade_history(String.t | number, number) :: {:ok, [any]} | {:error, any}
+  @spec get_trade_history(String.t | number, number) :: {:ok, [term]} | {:error, term}
   def get_trade_history(market, count) when is_number(market), do: make_request("GetTradeHistory", %{TradePairId: market, Count: count})
   def get_trade_history(market, count), do: make_request("GetTradeHistory", %{Market: market, Count: count})
 
@@ -193,7 +193,7 @@ defmodule CryptopiaApi.Private do
 
   See `get_transactions/1` for more details
   """
-  @spec get_deposit_transactions(number) :: {:ok, [any]} | {:error, any}
+  @spec get_deposit_transactions(number) :: {:ok, [term]} | {:error, term}
   def get_deposit_transactions(count \\ 100), do: get_transactions("Deposit", count)
 
   @doc """
@@ -201,7 +201,7 @@ defmodule CryptopiaApi.Private do
 
   See `get_transactions/1` for more details
   """
-  @spec get_deposit_transactions(number) :: {:ok, [any]} | {:error, any}
+  @spec get_deposit_transactions(number) :: {:ok, [term]} | {:error, term}
   def get_withdraw_transactions(count \\ 100), do: get_transactions("Withdraw", count)
 
   @doc """
@@ -219,7 +219,7 @@ defmodule CryptopiaApi.Private do
       Type: "Deposit"}]}
   ```
   """
-  @spec get_transactions(String.t, number) :: {:ok, [any]} | {:error, any}
+  @spec get_transactions(String.t, number) :: {:ok, [term]} | {:error, term}
   def get_transactions(type, count \\ 100), do: make_request("GetTransactions", %{Type: type, Count: count})
 
   @doc """
@@ -232,7 +232,7 @@ defmodule CryptopiaApi.Private do
   {:ok, %{FilledOrders: [], OrderId: 67556018}}
   ```
   """
-  @spec submit_trade_buy(String.t | number, number, number) :: {:ok, map} | {:error, any}
+  @spec submit_trade_buy(String.t | number, number, number) :: {:ok, map} | {:error, term}
   def submit_trade_buy(market, rate, amount), do: submit_trade(market, "Buy", rate, amount)
 
   @doc """
@@ -245,7 +245,7 @@ defmodule CryptopiaApi.Private do
   {:ok, %{FilledOrders: [], OrderId: 67556018}}
   ```
   """
-  @spec submit_trade_sell(String.t | number, number, number) :: {:ok, map} | {:error, any}
+  @spec submit_trade_sell(String.t | number, number, number) :: {:ok, map} | {:error, term}
   def submit_trade_sell(market, rate, amount), do: submit_trade(market, "Sell", rate, amount)
 
   @doc """
@@ -259,7 +259,7 @@ defmodule CryptopiaApi.Private do
   {:ok, %{FilledOrders: [], OrderId: 67556018}}
   ```
   """
-  @spec submit_trade(number, String.t, number, number) :: {:ok, map} | {:error, any}
+  @spec submit_trade(number, String.t, number, number) :: {:ok, map} | {:error, term}
   def submit_trade(market, type, rate, amount) when is_number(market) do 
     make_request("SubmitTrade", %{
       TradePairId: market,
@@ -280,7 +280,7 @@ defmodule CryptopiaApi.Private do
   {:ok, %{FilledOrders: [], OrderId: 67731009}}
   ```
   """
-  @spec submit_trade(String.t, String.t, number, number) :: {:ok, map} | {:error, any}
+  @spec submit_trade(String.t, String.t, number, number) :: {:ok, map} | {:error, term}
   def submit_trade(market, type, rate, amount) do 
     make_request("SubmitTrade", %{
       Market: market,
@@ -299,7 +299,7 @@ defmodule CryptopiaApi.Private do
   {:ok, [67731009]}
   ```
   """
-  @spec cancel_trade(number) :: {:ok, [number]} | {:error, any}
+  @spec cancel_trade(number) :: {:ok, [number]} | {:error, term}
   def cancel_trade(order_id), do: make_request("CancelTrade", %{Type: "Trade", OrderId: order_id})
 
   @doc """
@@ -317,7 +317,7 @@ defmodule CryptopiaApi.Private do
   {:ok, [65929994, 65930065]}
   ```
   """
-  @spec cancel_trade(String.t, number) :: {:ok, [number]} | {:error, any}
+  @spec cancel_trade(String.t, number) :: {:ok, [number]} | {:error, term}
   def cancel_trade(type, pair_id), do: make_request("CancelTrade", %{Type: type, TradePairId: pair_id})
 
   @doc """
@@ -329,7 +329,7 @@ defmodule CryptopiaApi.Private do
   {:ok, "You tipped 45 users 0.00034500 BTC each."}
   ```
   """
-  @spec submit_tip(number, 2..100, number) :: {:ok, String.t} | {:error, any}
+  @spec submit_tip(number, 2..100, number) :: {:ok, String.t} | {:error, term}
   def submit_tip(currency, users, amount) when is_number(currency) do  
     make_request("SubmitTip", %{
       CurrencyId: currency,
@@ -347,7 +347,7 @@ defmodule CryptopiaApi.Private do
   {:ok, "You tipped 45 users 0.00034500 BTC each."}
   ```
   """
-  @spec submit_tip(String.t, 2..100, number) :: {:ok, String.t} | {:error, any}
+  @spec submit_tip(String.t, 2..100, number) :: {:ok, String.t} | {:error, term}
   def submit_tip(currency, users, amount) do  
     make_request("SubmitTip", %{
       Currency: currency,
@@ -367,7 +367,7 @@ defmodule CryptopiaApi.Private do
   {:ok, 405667}
   ```
   """
-  @spec submit_withdraw(number, String.t, String.t | number, number) :: {:ok, number} | {:error, any}
+  @spec submit_withdraw(number, String.t, String.t | number, number) :: {:ok, number} | {:error, term}
   def submit_withdraw(currency, address, payment_id, amount) when is_number(currency) do
     make_request("SubmitWithdraw", %{
       CurrencyId: currency,
@@ -388,7 +388,7 @@ defmodule CryptopiaApi.Private do
   {:ok, 405667}
   ```
   """
-  @spec submit_withdraw(String.t, String.t, String.t | number, number) :: {:ok, number} | {:error, any}
+  @spec submit_withdraw(String.t, String.t, String.t | number, number) :: {:ok, number} | {:error, term}
   def submit_withdraw(currency, address, payment_id, amount) do
     make_request("SubmitWithdraw", %{
       Currency: currency,
@@ -407,7 +407,7 @@ defmodule CryptopiaApi.Private do
   {:ok, "Successfully transfered 100 BTC to Kosss"}
   ```
   """
-  @spec submit_transfer(number, String.t, number) :: {:ok, String.t} | {:error, any}
+  @spec submit_transfer(number, String.t, number) :: {:ok, String.t} | {:error, term}
   def submit_transfer(currency, username, amount) when is_number(currency) do
     make_request("SubmitTransfer", %{
       CurrencyId: currency,
@@ -425,7 +425,7 @@ defmodule CryptopiaApi.Private do
   {:ok, "Successfully transfered 100 BTC to Kosss"}
   ```
   """
-  @spec submit_transfer(String.t, String.t, number) :: {:ok, String.t} | {:error, any}
+  @spec submit_transfer(String.t, String.t, number) :: {:ok, String.t} | {:error, term}
   def submit_transfer(currency, username, amount) do
     make_request("SubmitTransfer", %{
       Currency: currency,
