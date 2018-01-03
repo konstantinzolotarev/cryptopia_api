@@ -22,9 +22,14 @@ defmodule CryptopiaApi do
     # Cryptopia for some reason send [zero-width whitespace](http://www.fileformat.info/info/unicode/char/200B/index.htm)
     # as a first char in private api. we have to replace it
     # otherwise Poison.decode! will raise an exception
-    body
-    |> String.replace_prefix(<<0xfeff::utf8>>, "")
-    |> Poison.decode!(keys: :atoms)
+    result = body
+             |> String.replace_prefix(<<0xfeff::utf8>>, "")
+             |> Poison.decode(keys: :atoms)
+
+    case result do
+      {:ok, parsed} -> parsed
+      _ -> body
+    end
   end
 
   def get_body(url), do: get(url, %{}, hackney: [:insecure]) |> fetch_body() |> pick_data()
@@ -36,8 +41,8 @@ defmodule CryptopiaApi do
     |> pick_data()
   end
 
-  defp fetch_body({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: {:ok, body}
-  defp fetch_body({:ok, %HTTPoison.Response{status_code: 201, body: body}}), do: {:ok, body}
+  defp fetch_body({:ok, %HTTPoison.Response{status_code: 200, body: body}}) when is_map(body), do: {:ok, body}
+  defp fetch_body({:ok, %HTTPoison.Response{status_code: 201, body: body}}) when is_map(body), do: {:ok, body}
   # Handle not auth for user. API would not return anything in body
   defp fetch_body({:ok, %HTTPoison.Response{status_code: 401}}), do: {:error, "Wrong authorisation !"}
   defp fetch_body({:ok, %HTTPoison.Response{body: body}}), do: {:error, body}
